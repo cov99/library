@@ -1,5 +1,6 @@
 from django.db import models
-from applications.book.models import Book 
+from applications.book.models import Book
+from .managers import ReaderManager
 
 class Reader(models.Model):
     names = models.CharField(
@@ -13,11 +14,13 @@ class Reader(models.Model):
     )
     age = models.PositiveIntegerField(default=0)
 
+    objects = ReaderManager()
+
     def __str__(self):
         return self.names
 
 
-class Loan(models.Model):
+class LendLease(models.Model):
     reader = models.ForeignKey(
         Reader,
         on_delete=models.CASCADE

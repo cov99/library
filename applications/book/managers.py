@@ -5,3 +5,8 @@ class BookManager(models.Manager):
 
     def list_books(self):
         return self.all()
+
+class CategoryManager(models.Manager):
+
+    def list_categories(self):
+        return self.all()
