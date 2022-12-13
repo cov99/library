@@ -7,5 +7,7 @@ class ListAuthors(ListView):
     template_name = 'author/list.html'
 
     def get_queryset(self):
-
-        return Author.objects.list_authors()
+        keyword = self.request.GET.get("kword", None)
+        if keyword:
+            return Author.objects.search_author4(keyword)
+        return Author.objects.all()

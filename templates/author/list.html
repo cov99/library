@@ -1,9 +1,17 @@
 <h1>list of authors</h1>
 
+<p>
+    <form method="GET">{% csrf_token %}
+        <input type="text" id="kword" name="kword" placeholder="enter name">
+        <button type="submit">Consult</button>
+
+    </form>
+</p>
+
 <ul>
     
     {% for a in list_authors %}
-        <li>{{ a.name }}</li>
+        <li>{{ a.name }} {{ a.surnames }} - {{ a.nationality }}</li>
     {% endfor %}
         
 </ul>
