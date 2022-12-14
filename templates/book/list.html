@@ -1,9 +1,22 @@
 <h1>list of books</h1>
 
+<p>
+    <form method="GET">{% csrf_token %}
+        <input type="text" id="kword" name="kword" placeholder="enter name">
+
+        <input type="date" name="release_date1" id="release_date1">
+
+        <input type="date" name="release_date2" id="release_date2">
+
+        <button type="submit">Consult</button>
+
+    </form>
+</p>
+
 <ul>
     
     {% for b in list_books %}
-        <li>{{ b.tittle }}</li>
+        <li>{{ b.tittle }} {{ b.release_date }}</li>
     {% endfor %}
         
 </ul>
