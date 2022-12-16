@@ -1,7 +1,5 @@
 import datetime
 from django.db import models
-from django.db.models import Q
-
 
 class BookManager(models.Manager):
     """ managers for the book model"""
@@ -32,3 +30,12 @@ class BookManager(models.Manager):
         return self.filter(
             category__id=category
         ).order_by('tittle')
+
+
+class CategoryManager(models.Manager):
+    """ managers for the book model"""
+
+    def category_for_author(self, author):
+        return self.filter(
+            category_book__authors__id=author
+        ).distinct() #para que la categoria no se repita
