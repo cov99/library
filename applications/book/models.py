@@ -25,8 +25,14 @@ class Book(models.Model):
     release_date = models.DateField()
     front_page = models.ImageField(upload_to='front_page')
     visits = models.PositiveIntegerField()
+    stock = models.PositiveIntegerField(default=0)
 
     objects = BookManager()
 
+    class Meta:
+        verbose_name = 'book'
+        verbose_name_plural = 'books'
+        ordering = ['tittle', 'release_date']
+
     def __str__(self):
-        return self.tittle
+        return f"{str(self.id)} - {self.tittle}"

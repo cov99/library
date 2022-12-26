@@ -1,24 +1,13 @@
 from django.db import models
 from applications.book.models import Book
-from .managers import ReaderManager
+from applications.author.models import Person
+from .managers import LendleaseManager
 
-class Reader(models.Model):
-    names = models.CharField(
-        max_length=50
-    )
-    surnames = models.CharField(
-        max_length=50
-    )
-    nationality = models.CharField(
-        max_length=30
-    )
-    age = models.PositiveIntegerField(default=0)
-
-    objects = ReaderManager()
-
-    def __str__(self):
-        return self.names
-
+class Reader(Person):
+    
+    class Meta:
+        verbose_name = 'Reader'
+        verbose_name_plural = 'Readers'
 
 class LendLease(models.Model):
     reader = models.ForeignKey(
@@ -27,7 +16,8 @@ class LendLease(models.Model):
     )
     book = models.ForeignKey(
         Book,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='book_lendlease',
     )
     loan_date = models.DateField()
     return_date = models.DateField(
@@ -35,6 +25,15 @@ class LendLease(models.Model):
         null=True,
     ) #campo no obligatorio
     returned = models.BooleanField()
+    objects = LendleaseManager()
+
+    def save(self, *args, **kwargs):
+
+        print('========')
+        self.book.stock = self.book.stock -1
+        self.book.save()
+
+        super(LendLease, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.book.tittle

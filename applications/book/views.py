@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Book
 
 class ListBooks(ListView):
@@ -22,6 +22,16 @@ class ListBooks(ListView):
         return Book.objects.all()
 
 
+class ListBooksTrg(ListView):
+    context_object_name = 'list_books'
+    template_name = 'book/list.html'
+
+    def get_queryset(self):
+        keyword = self.request.GET.get("kword", '')
+
+        return Book.objects.list_books_trgm(keyword)
+
+
 class ListBooks2(ListView):
     context_object_name = 'list_books'
     template_name = 'book/list2.html'
@@ -29,3 +39,8 @@ class ListBooks2(ListView):
     def get_queryset(self):
 
         return Book.objects.list_books_category('5')
+
+class BookDetailView(DetailView):
+    template_name = "book/detail.html"
+    model = Book
+    

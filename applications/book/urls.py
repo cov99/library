@@ -13,4 +13,14 @@ urlpatterns = [
         views.ListBooks2.as_view(),
         name="books2"
     ),
+    path(
+        'books-trg/',
+        views.ListBooksTrg.as_view(),
+        name="books-trg"
+    ),
+    path(
+        'book-detail/<pk>',
+        views.BookDetailView.as_view(),
+        name="book-detail"
+    ),
 ]
