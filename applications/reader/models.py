@@ -1,6 +1,10 @@
 from django.db import models
-from applications.book.models import Book
+from django.db.models.signals import post_delete
+# from author 
 from applications.author.models import Person
+# from local apps
+from applications.book.models import Book
+# managers
 from .managers import LendleaseManager
 
 class Reader(Person):
@@ -37,3 +41,12 @@ class LendLease(models.Model):
 
     def __str__(self):
         return self.book.tittle
+
+# si creamos muchos signals mejor crear archivo signals.py e importar
+# si son pocos 1 o 3 crear signals en models simplemente
+def update_book_stock(sender, instance, **kwargs):
+    # actualizamos el stock si se elimina un prestamo
+    instance.book.stock = instance.book.stock + 1
+    instance.book.save()
+
+post_delete.connect(update_book_stock, sender=LendLease)

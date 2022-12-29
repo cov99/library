@@ -63,7 +63,27 @@ class AddMultipleLendLease(FormView):
     success_url = '.'
 
     def form_valid(self, form):
-
+        #
+        print(form.cleaned_data['reader'])
+        print(form.cleaned_data['books'])
+        #
+        lendleases = []
+        for b in form.cleaned_data['books']:
+            lendlease = LendLease(
+                reader=form.cleaned_data['reader'],
+                book=b,
+                loan_date=date.today(),
+                returned=False
+            )
+            lendleases.append(lendlease)
         
+        LendLease.objects.bulk_create(
+            lendleases
+        )
+
+        for lend in lendleases:
+            b = lend.book
+            b.stock = b.stock -1
+            b.save()
 
         return super(AddMultipleLendLease, self).form_valid(form)

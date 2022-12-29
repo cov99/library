@@ -1,4 +1,8 @@
 from django.db import models
+from django.db.models.signals import post_save
+# apps terceros
+from PIL import Image
+# from local apps
 from applications.author.models import Author
 # managers
 from .managers import BookManager, CategoryManager
@@ -36,3 +40,12 @@ class Book(models.Model):
 
     def __str__(self):
         return f"{str(self.id)} - {self.tittle}"
+
+def optimize_image(sender, instance, **kwargs):
+    print(" ======== ")
+    if instance.front_page:
+        front_page = Image.open(instance.front_page.path)
+        front_page.save(instance.front_page.path, quality=20, optimize=True)
+
+
+post_save.connect(optimize_image, sender=Book)
